@@ -167,6 +167,37 @@ public class Scanner {
 
     }
 
+    public UniteLexicale getStringLiteral() {
+        int etat = 0;
+        StringBuffer sb = new StringBuffer();
+        while (true) {
+            switch (etat) {
+                case 0:
+                    if (caractereCourant == '\"') {
+                        etat = 1; // Transition to state 1 if the current character is a double quote
+                    } else {
+                        // Handle error or unexpected character
+                    }
+                    break;
+                case 1:
+                    caractereSuivant();
+                    if (eof) {
+                        etat = 3; // Transition to state 3 if EOF is reached
+                    } else if (caractereCourant != '\"') {
+                        sb.append(caractereCourant); // Append non-quote characters
+                    } else {
+                        etat = 2; // Transition to state 2 if a closing quote is found
+                    }
+                    break;
+                case 2:
+                    return new UniteLexicale(Categorie.STRING_LITERAL, sb.toString()); // Return the string literal
+                case 3:
+                    // Handle EOF without closing quote error
+                    break;
+            }
+        }
+    }
+
     public UniteLexicale getOPPASS() {
         int etat = 0;
         StringBuffer sb = new StringBuffer();
