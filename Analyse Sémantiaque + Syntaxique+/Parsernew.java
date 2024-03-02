@@ -14,7 +14,7 @@ public class Parsernew {
                         "VarDeclaration -> Identifier : DataType OptionalInit ;",
 
                         "DataType -> Map | List | String | Int | Boolean",
-                        "OptionalInit -> = InitValue | ε",
+                        "OptionalInit -> ~ InitValue | ε",
 
                         "InitValue -> ListInit | MapInit",
                         "ListInit -> { Elements }",
@@ -31,10 +31,10 @@ public class Parsernew {
                         "MainBlock -> [ Instructions ]",
                         "Instructions -> Instruction Instructions | ε",
 
-                        "Instruction -> Input Identifier ; | Output Expression ; | Identifier = Expression ; | If Expression Then Instructions Else Instructions | While Expression Do Instructions",
+                        "Instruction -> Input Identifier ; | Output Expression ; | Identifier ~ Expression ; | If Expression Then Instructions Else Instructions | While Expression Do Instructions",
 
-                        "Expression -> Identifier | Int | StringLiteral | Expression Operator Expression",
-                        "Operator -> + | - | * | / | == | != | < | > | <= | >= | And | Or"
+                        "Expression -> Identifier | Int | StringLiteral | Expression Operator Expression | ( Expression )"  ,
+                        "Operator -> + | - | * | / | = | # | < | > | And | Or"
         };
 
         public String[][] tableSLR = {

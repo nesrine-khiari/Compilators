@@ -1,7 +1,7 @@
 public enum Categorie {
     EOF, // End of file
     ID, // Identifier
-    $,
+    // $,
     OPP, //All operators
     OPASS, //Assign
     OPEN_PAREN, // '('
@@ -11,7 +11,8 @@ public enum Categorie {
     COMMA, // ','
     BEGIN, // ','
     END, // ','
-    SEMICOLON; // ';'
+    SEMICOLON,
+    DOUBLE_POINT; // ';'
   
     
 
