@@ -1,38 +1,46 @@
-
-public enum Categorie{
-    EOF,
+public enum Categorie {
+    EOF, // End of file
+    ID, // Identifier
     $,
-    NUL,
-    ID,
-    NOMBRE,
-    OPPAff,
-    OPP,
-    POINT,
-    DPOINT,
-    PARENOUV,
-    PARENFERM,
-    CROCHOUV,
-    CROCHFERM,
-    DEBUT,
-    FIN,
-    
-    ;
-
+    OPP, //All operators
+    OPASS, //Assign
+    OPEN_PAREN, // '('
+    CLOSE_PAREN, // ')'
+    OPEN_BRACE, // '{'
+    CLOSE_BRACE, // '}'
+    COMMA, // ','
+    BEGIN, // ','
+    END, // ','
+    SEMICOLON; // ';'
+  
     
 
-
+    @Override
     public String toString() {
-        return this.name().toLowerCase();
+        return name().toLowerCase(); // Converts enum name to lowercase
     }
 
-
-public static Categorie toCategorie(String s) {
-    for(Categorie c:Categorie.values())
-        if(c.toString().equalsIgnoreCase(s))
-            return c;
-    return null;
+    public static Categorie fromString(String text) {
+        for (Categorie b : Categorie.values()) {
+            if (b.name().equalsIgnoreCase(text)) {
+                return b;
+            }
+        }
+        return null;
+    }
 }
 
+ // ASSIGN, // Assignment operator '='
+    // PLUS, // '+'
+    // MINUS, // '-'
+    // MULTIPLY, // '*'
+    // DIVIDE, // '/'
+    // EQUALS, // '=='
+    // NOT_EQUALS, // '!='
+    // LESS_THAN, // '<'
+    // GREATER_THAN, // '>'
+    // LESS_THAN_EQUALS, // '<='
+    // GREATER_THAN_EQUALS, // '>='
 
 
-}
+    
