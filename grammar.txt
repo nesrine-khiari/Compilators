@@ -1,0 +1,56 @@
+P'->P
+P->Dec Main
+Dec->Id : T Init ;
+
+T->Map
+T->List
+T->String
+T->Integer
+T->Boolean
+
+Init->~ InitV 
+
+InitV->{ Els }
+InitV->{ KVPs }
+InitV->V
+
+V->Id
+V->Int
+V->Str 
+
+Els->V
+Els->V , Els
+
+
+KVPs->KVP
+KVPs->KVP , KVPs
+
+KVP->K : V
+
+K->Str
+K->Id
+
+
+
+Main->[ I ] 
+
+I->Input Id ;
+I->Output E ;
+I->Id ~ E ;
+I->If E Then I Else I
+I->While E Do I
+
+E->V
+E->V Op V
+E->( E ) Op E
+
+Op->+
+Op->-
+Op->*
+Op->/
+Op->=
+Op->#
+Op-><
+Op->>
+Op->And
+Op->Or
