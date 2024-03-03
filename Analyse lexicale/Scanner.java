@@ -61,11 +61,14 @@ public class Scanner {
         if (Character.isLetter(caractereCourant))
             return getID();
 
+        if (caractereCourant == '\"')
+            return getStringLiteral();
+
         if (Character.isDigit(caractereCourant))
             return getNombre();
 
         if (caractereCourant == '~')
-            return getOPPAff();
+            return new UniteLexicale(Categorie.OPASS, "~");
 
         if (caractereCourant == '(')
             return new UniteLexicale(Categorie.OPEN_PAREN, "(");
@@ -93,7 +96,8 @@ public class Scanner {
             return new UniteLexicale(Categorie.COMMA, ",");
 
         if (caractereCourant == '<' || caractereCourant == '>' || caractereCourant == '=' || caractereCourant == '+'
-                || caractereCourant == '-' || caractereCourant == '*' || caractereCourant == '/')
+                || caractereCourant == '-' || caractereCourant == '*' || caractereCourant == '/'
+                || caractereCourant == '#')
             return getOPP();
 
         return null;
@@ -159,9 +163,9 @@ public class Scanner {
                     break;
                 case 2:
                     reculer();
-                    return new UniteLexicale(Categorie.INT, sb.toString());
+                    return new UniteLexicale(Categorie.INT_LITERAL, sb.toString());
                 case 3:
-                    return new UniteLexicale(Categorie.INT, sb.toString());
+                    return new UniteLexicale(Categorie.INT_LITERAL, sb.toString());
             }
         }
 
@@ -173,11 +177,10 @@ public class Scanner {
         while (true) {
             switch (etat) {
                 case 0:
-                    if (caractereCourant == '\"') {
-                        etat = 1; // Transition to state 1 if the current character is a double quote
-                    } else {
-                        // Handle error or unexpected character
-                    }
+
+                    etat = 1; // Transition to state 1 if the current character is a double quote
+                    sb.append(caractereCourant);
+
                     break;
                 case 1:
                     caractereSuivant();
@@ -192,55 +195,55 @@ public class Scanner {
                 case 2:
                     return new UniteLexicale(Categorie.STRING_LITERAL, sb.toString()); // Return the string literal
                 case 3:
-                    // Handle EOF without closing quote error
-                    break;
+                    return new UniteLexicale(Categorie.STRING_LITERAL, sb.toString());
+
             }
         }
     }
 
-    public UniteLexicale getOPPASS() {
-        int etat = 0;
-        StringBuffer sb = new StringBuffer();
-        while (true) {
-            switch (etat) {
-                case 0:
-                    if (eof)
-                        break;
-                    else if (caractereCourant == '~') {
-                        sb.append(caractereCourant);
-                        caractereSuivant();
-                        etat = 1;
+    // public UniteLexicale getOPPASS() {
+    // int etat = 0;
+    // StringBuffer sb = new StringBuffer();
+    // while (true) {
+    // switch (etat) {
+    // case 0:
+    // if (eof)
+    // break;
+    // else if (caractereCourant == '~') {
+    // sb.append(caractereCourant);
+    // caractereSuivant();
+    // etat = 1;
 
-                    } else
-                        break;
+    // } else
+    // break;
 
-                case 1:
-                    if (eof)
-                        break;
-                    else if (caractereCourant == '~') {
-                        sb.append(caractereCourant);
-                        caractereSuivant();
-                        etat = 2;
+    // case 1:
+    // if (eof)
+    // break;
+    // else if (caractereCourant == '~') {
+    // sb.append(caractereCourant);
+    // caractereSuivant();
+    // etat = 2;
 
-                    } else
-                        break;
+    // } else
+    // break;
 
-                case 2:
-                    if (eof)
-                        etat = 3;
-                    else
-                        etat = 5;
-                case 3:
+    // case 2:
+    // if (eof)
+    // etat = 3;
+    // else
+    // etat = 5;
+    // case 3:
 
-                    return new UniteLexicale(Categorie.OPASS, sb.toString());
-                case 4:
-                    reculer();
-                    return new UniteLexicale(Categorie.OPASS, sb.toString());
+    // return new UniteLexicale(Categorie.OPASS, sb.toString());
+    // case 4:
+    // reculer();
+    // return new UniteLexicale(Categorie.OPASS, sb.toString());
 
-            }
+    // }
 
-        }
-    }
+    // }
+    // }
 
     public UniteLexicale getOPP() {
         int etat = 0;
@@ -271,10 +274,19 @@ public class Scanner {
                         sb.append(caractereCourant);
                         caractereSuivant();
                         etat = 10;
+                    } else if (caractereCourant == '/') {
+                        sb.append(caractereCourant);
+                        caractereSuivant();
+                        etat = 11;
+
+                    } else if (caractereCourant == '*') {
+                        sb.append(caractereCourant);
+                        caractereSuivant();
+                        etat = 12;
+
                     }
 
-                    else
-                        break;
+                    break;
 
                 case 1:
                     if (eof) {
@@ -294,6 +306,8 @@ public class Scanner {
                     } else
                         etat = 5;
 
+                    break;
+
                 case 3:
                     if (eof)
                         break;
@@ -309,6 +323,8 @@ public class Scanner {
 
                     } else
                         etat = 8;
+
+                    break;
 
                 case 4:
                     if (eof) {
@@ -355,6 +371,18 @@ public class Scanner {
                     } else
                         reculer();
                     return new UniteLexicale(Categorie.OPP, "MOINS");
+                case 11:
+                    if (eof) {
+                        return new UniteLexicale(Categorie.OPP, "DIVIDE");
+                    } else
+                        reculer();
+                    return new UniteLexicale(Categorie.OPP, "DIVIDE");
+                case 12:
+                    if (eof) {
+                        return new UniteLexicale(Categorie.OPP, "MULTIPLY");
+                    } else
+                        reculer();
+                    return new UniteLexicale(Categorie.OPP, "MULTIPLY");
 
             }
 
@@ -368,11 +396,11 @@ public class Scanner {
     }
 
     public boolean VerifMotcle(String s) {
-        return (s.equals("si") || s.equals("alors") || s.equals("tantque") ||
-                s.equals("faire") || s.equals("lire") || s.equals("ecrire") ||
-                s.equals("et") || s.equals("ou") || s.equals("char") ||
-                s.equals("Declaration") || s.equals("Corps") || s.equals("FinDec") ||
-                s.equals("FinCoprs") || s.equals("entier") || s.equals("bolean") || s.equals("tableau"));
+        return (s.equals("If") || s.equals("Else") || s.equals("Then") || s.equals("While") ||
+                s.equals("Do") || s.equals("Input") || s.equals("Output") ||
+                s.equals("And") || s.equals("Or") || s.equals("String") ||
+                s.equals("Map") || s.equals("Int") || s.equals("List") || s.equals("EndDeclerations") ||
+                s.equals("Boolean"));
     }
 
 }

@@ -2,7 +2,8 @@ public enum Categorie {
     EOF, // End of file
     ID, // Identifier
     // $,
-    INT,
+    INT_LITERAL,
+    STRING_LITERAL,
     OPP, //All operators
     OPASS, //Assign
     OPEN_PAREN, // '('
